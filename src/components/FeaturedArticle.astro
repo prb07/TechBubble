@@ -1,0 +1,586 @@
+---
+import { sanityClient } from "../lib/sanity";
+
+const article = await sanityClient.fetch(`
+*[_type == "article" && featured == true][0]
+`);
+---
+
+<div class="featured-card">
+
+  <div class="article-content">
+
+    <span class="tag">
+      FEATURED ARTICLE
+    </span>
+
+
+    <h2>
+      {article?.title}
+    </h2>
+
+
+    <p>
+      {article?.description}
+    </p>
+
+
+
+    <div class="author">
+
+      <div class="avatar"></div>
+
+      <div>
+        <strong>
+          {article?.author}
+        </strong>
+
+        <small>
+          {article?.readTime}
+        </small>
+      </div>
+
+    </div>
+
+
+
+    <button>
+      Read Article →
+    </button>
+
+
+  </div>
+
+
+
+
+  <div class="ai-scene">
+
+
+    <div class="orb">
+
+      <div class="reflection"></div>
+
+      <span>
+        AI
+      </span>
+
+    </div>
+
+
+
+
+    <div class="platform">
+
+      <div class="platform-top"></div>
+
+      <div class="platform-mid"></div>
+
+      <div class="platform-bottom"></div>
+
+    </div>
+
+
+  </div>
+
+
+</div>
+
+
+
+<style>
+
+
+.featured-card{
+
+position:relative;
+
+min-height:360px;
+
+width:100%;
+
+overflow:hidden;
+
+border-radius:32px;
+
+padding:32px;
+
+
+background:
+
+linear-gradient(
+135deg,
+rgba(255,255,255,.65),
+rgba(244,238,255,.55)
+);
+
+
+border:1px solid rgba(130,100,255,.18);
+
+
+backdrop-filter:blur(30px);
+
+}
+
+
+
+
+
+.article-content{
+
+position:relative;
+
+z-index:5;
+
+width:48%;
+
+}
+
+
+
+
+.tag{
+
+display:inline-block;
+
+padding:5px 13px;
+
+border-radius:20px;
+
+font-size:9px;
+
+letter-spacing:.5px;
+
+color:#8064ff;
+
+background:white;
+
+border:1px solid rgba(130,100,255,.25);
+
+}
+
+
+
+
+
+h2{
+
+margin-top:22px;
+
+font-size:27px;
+
+line-height:1.25;
+
+letter-spacing:-.8px;
+
+color:#21184f;
+
+}
+
+
+
+
+
+p{
+
+margin-top:15px;
+
+font-size:13px;
+
+line-height:1.6;
+
+color:#68657c;
+
+max-width:350px;
+
+}
+
+
+
+
+
+.author{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+margin-top:18px;
+
+}
+
+
+
+
+
+.avatar{
+
+width:38px;
+
+height:38px;
+
+border-radius:50%;
+
+background:#ddd;
+
+}
+
+
+
+
+
+.author strong{
+
+display:block;
+
+font-size:12px;
+
+color:#21184f;
+
+}
+
+
+
+
+.author small{
+
+font-size:10px;
+
+color:#777;
+
+}
+
+
+
+
+button{
+
+margin-top:18px;
+
+padding:11px 25px;
+
+border:none;
+
+border-radius:9px;
+
+background:#725cff;
+
+color:white;
+
+font-size:12px;
+
+font-weight:600;
+
+position:relative;
+
+z-index:20;
+
+cursor:pointer;
+
+}
+
+
+
+
+
+/* AI AREA */
+
+
+.ai-scene{
+
+position:absolute;
+
+right:0;
+
+bottom:0;
+
+width:48%;
+
+height:100%;
+
+}
+
+
+
+
+.orb{
+
+position:absolute;
+
+right:100px;
+
+top:55px;
+
+width:150px;
+
+height:150px;
+
+border-radius:50%;
+
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+
+
+background:
+
+radial-gradient(
+circle at 30% 20%,
+rgba(255,255,255,.95),
+rgba(255,255,255,.3) 25%,
+rgba(200,185,255,.55) 55%,
+rgba(135,90,255,.9)
+);
+
+
+
+box-shadow:
+
+0 0 60px rgba(130,90,255,.45),
+
+inset 0 0 35px rgba(255,255,255,.8);
+
+
+
+}
+
+
+
+
+.orb span{
+
+font-size:58px;
+
+font-weight:700;
+
+color:white;
+
+z-index:2;
+
+}
+
+
+
+
+
+.reflection{
+
+position:absolute;
+
+width:55px;
+
+height:25px;
+
+background:white;
+
+opacity:.45;
+
+border-radius:50%;
+
+top:25px;
+
+left:35px;
+
+filter:blur(10px);
+
+}
+
+
+
+
+
+.platform{
+
+position:absolute;
+
+right:35px;
+
+bottom:35px;
+
+width:260px;
+
+height:150px;
+
+}
+
+
+
+
+.platform div{
+
+position:absolute;
+
+border-radius:22px;
+
+
+background:
+
+linear-gradient(
+
+135deg,
+
+rgba(255,255,255,.95),
+
+rgba(190,165,255,.8)
+
+);
+
+
+
+box-shadow:
+
+0 15px 35px rgba(120,90,255,.25);
+
+}
+
+
+
+
+.platform-top{
+
+width:130px;
+
+height:25px;
+
+right:65px;
+
+bottom:100px;
+
+}
+
+
+
+
+.platform-mid{
+
+width:190px;
+
+height:35px;
+
+right:35px;
+
+bottom:60px;
+
+}
+
+
+
+
+.platform-bottom{
+
+width:240px;
+
+height:45px;
+
+right:10px;
+
+bottom:10px;
+
+}
+
+
+
+
+
+@media(max-width:900px){
+
+
+.featured-card{
+
+min-height:500px;
+
+padding:28px;
+
+}
+
+
+
+.article-content{
+
+width:100%;
+
+}
+
+
+
+.ai-scene{
+
+right:-80px;
+
+bottom:-20px;
+
+opacity:.35;
+
+transform:scale(.85);
+
+}
+
+
+
+button{
+
+margin-bottom:20px;
+
+}
+
+
+}
+
+
+
+
+
+@media(max-width:600px){
+
+
+.featured-card{
+
+min-height:560px;
+
+padding:24px;
+
+}
+
+
+
+h2{
+
+font-size:23px;
+
+line-height:1.3;
+
+}
+
+
+
+p{
+
+font-size:14px;
+
+}
+
+
+
+.ai-scene{
+
+right:-120px;
+
+bottom:-50px;
+
+transform:scale(.65);
+
+opacity:.3;
+
+}
+
+
+
+}
+
+</style>
