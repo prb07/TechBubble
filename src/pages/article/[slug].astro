@@ -1,0 +1,518 @@
+---
+import type { SanityImageSource } from "@sanity/image-url";
+import type { PortableTextBlock } from "@portabletext/types";
+import { defineQuery } from "groq";
+import { PortableText } from "astro-portabletext";
+import { Facebook, Link2, Printer, Share2 } from "lucide-astro";
+import ArticleTopAd from "../../components/ArticleTopAd.astro";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { sanityClient, urlFor } from "../../lib/sanity";
+import "../../styles/article.css";
+
+type ArticleImage = SanityImageSource & {
+  alt?: string;
+  caption?: string;
+  credit?: string;
+};
+
+interface RelatedArticle {
+  _id: string;
+  title: string;
+  slug: string;
+  category?: string;
+  publishedAt?: string;
+  image?: ArticleImage;
+}
+
+interface ArticleDocument {
+  _id: string;
+  title: string;
+  description?: string;
+  category?: string;
+  author?: string;
+  readTime?: string;
+  publishedAt?: string;
+  image?: ArticleImage;
+  body?: PortableTextBlock[];
+  related?: RelatedArticle[];
+}
+
+export async function getStaticPaths() {
+  const ARTICLE_PATHS_QUERY = defineQuery(/* groq */ `
+    *[_type == "article" && defined(slug.current)] {
+      "params": {
+        "slug": slug.current
+      }
+    }
+  `);
+
+  const paths = await sanityClient.fetch<Array<{ params: { slug: string } }>>(
+    ARTICLE_PATHS_QUERY,
+  );
+
+  return Array.from(
+    new Map(paths.map((path) => [path.params.slug, path])).values(),
+  );
+}
+
+const ARTICLE_QUERY = defineQuery(/* groq */ `
+  *[
+    _type == "article" &&
+    slug.current == $slug
+  ] | order(_updatedAt desc)[0] {
+    _id,
+    title,
+    description,
+    category,
+    author,
+    readTime,
+    "publishedAt": coalesce(publishedAt, _createdAt),
+    image {
+      asset,
+      alt,
+      caption,
+      credit,
+      hotspot,
+      crop
+    },
+    body,
+    "related": *[
+      _type == "article" &&
+      defined(slug.current) &&
+      defined(image.asset) &&
+      _id != ^._id
+    ] | order(coalesce(publishedAt, _createdAt) desc, _id asc)[0...4] {
+      _id,
+      title,
+      "slug": slug.current,
+      category,
+      "publishedAt": coalesce(publishedAt, _createdAt),
+      image {
+        asset,
+        alt,
+        hotspot,
+        crop
+      }
+    }
+  }
+`);
+
+const { slug = "" } = Astro.params;
+const article = await sanityClient.fetch<ArticleDocument | null>(
+  ARTICLE_QUERY,
+  { slug },
+);
+
+if (!article) {
+  return Astro.redirect("/");
+}
+
+const articleImage = article.image;
+const imageUrl = articleImage
+  ? urlFor(articleImage)
+      .width(1440)
+      .height(960)
+      .fit("crop")
+      .auto("format")
+      .url()
+  : undefined;
+
+const imageSrcSet = articleImage
+  ? [640, 960, 1440]
+      .map(
+        (width) =>
+          `${urlFor(articleImage)
+            .width(width)
+            .height(Math.round(width / 1.5))
+            .fit("crop")
+            .auto("format")
+            .url()} ${width}w`,
+      )
+      .join(", ")
+  : undefined;
+
+const author = article.author || "TechBubble Editorial";
+const category = article.category || "Technology";
+const hasBody = Array.isArray(article.body) && article.body.length > 0;
+const formatDate = (
+  value: string | undefined,
+  options: Intl.DateTimeFormatOptions,
+) => {
+  if (!value) return "";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+
+  return new Intl.DateTimeFormat("en", options).format(date);
+};
+
+const formattedDate = formatDate(article.publishedAt, {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+
+const relatedStories = (article.related || []).map((story) => {
+  const relatedImage = story.image;
+  const relatedImageUrl = relatedImage
+    ? urlFor(relatedImage)
+        .width(360)
+        .height(240)
+        .fit("crop")
+        .auto("format")
+        .url()
+    : undefined;
+  const relatedImageSrcSet = relatedImage
+    ? [160, 240, 360]
+        .map(
+          (width) =>
+            `${urlFor(relatedImage)
+              .width(width)
+              .height(Math.round(width / 1.5))
+              .fit("crop")
+              .auto("format")
+              .url()} ${width}w`,
+        )
+        .join(", ")
+    : undefined;
+
+  return {
+    ...story,
+    href: `/article/${encodeURIComponent(story.slug)}/`,
+    formattedDate: formatDate(story.publishedAt, {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    }),
+    imageUrl: relatedImageUrl,
+    imageSrcSet: relatedImageSrcSet,
+  };
+});
+
+const pageDescription =
+  article.description || `Read ${article.title} on TechBubble.`;
+---
+
+<SiteLayout
+  title={`${article.title} | TechBubble`}
+  description={pageDescription}
+  bodyClass="article-page"
+  skipHref="#article-content"
+  skipLabel="Skip to article"
+>
+  <main id="article-content" class="article-shell">
+    <ArticleTopAd />
+
+    <article class="article-story" aria-labelledby="article-title">
+      <div class:list={["article-lead", { "article-lead--no-image": !imageUrl }]}>
+        {imageUrl && (
+          <figure class="hero-figure">
+            <div class="hero-media">
+              <img
+                src={imageUrl}
+                srcset={imageSrcSet}
+                sizes="(max-width: 700px) calc(100vw - 32px), (max-width: 900px) calc(100vw - 64px), (max-width: 1240px) calc(100vw - 436px), 780px"
+                alt={articleImage?.alt || article.title}
+                width="1440"
+                height="960"
+                loading="eager"
+                decoding="async"
+                fetchpriority="high"
+              />
+            </div>
+
+            {(articleImage?.caption || articleImage?.credit) && (
+              <figcaption>
+                {articleImage.caption && <span>{articleImage.caption}</span>}
+                {articleImage.credit && (
+                  <span class="image-credit">Photo: {articleImage.credit}</span>
+                )}
+              </figcaption>
+            )}
+          </figure>
+        )}
+
+        <header class="article-header">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="/">News</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">{category}</span>
+          </nav>
+
+          <span class="article-category">{category}</span>
+          <h1 id="article-title">{article.title}</h1>
+
+          <div class="meta-share-row">
+            <div class="article-meta">
+              <span class="author-mark" aria-hidden="true">
+                {author.charAt(0).toUpperCase()}
+              </span>
+              <span>
+                <strong>{author}</strong>
+                <span class="meta-line">
+                  {formattedDate && (
+                    <time datetime={article.publishedAt}>{formattedDate}</time>
+                  )}
+                  {formattedDate && article.readTime && (
+                    <span aria-hidden="true"> &middot; </span>
+                  )}
+                  {article.readTime}
+                </span>
+              </span>
+            </div>
+
+            <div
+              class="share-cluster"
+              data-share-root
+              data-share-title={article.title}
+              role="group"
+              aria-label="Share this article"
+            >
+              <span class="share-caption">Share</span>
+              <div class="share-buttons">
+                <button
+                  class="share-button facebook-button"
+                  type="button"
+                  data-share-action="facebook"
+                  aria-label="Share on Facebook"
+                  title="Share on Facebook"
+                >
+                  <Facebook size={18} strokeWidth={2} aria-hidden="true" />
+                </button>
+                <button
+                  class="share-button x-button"
+                  type="button"
+                  data-share-action="x"
+                  aria-label="Share on X"
+                  title="Share on X"
+                >
+                  <span class="x-mark" aria-hidden="true">X</span>
+                </button>
+                <button
+                  class="share-button native-share-button"
+                  type="button"
+                  data-share-action="native"
+                  aria-label="Share using your device"
+                  title="Share using your device"
+                >
+                  <Share2 size={18} strokeWidth={2} aria-hidden="true" />
+                </button>
+                <button
+                  class="share-button copy-button"
+                  type="button"
+                  data-share-action="copy"
+                  aria-label="Copy article link"
+                  title="Copy article link"
+                >
+                  <Link2 size={18} strokeWidth={2} aria-hidden="true" />
+                </button>
+                <button
+                  class="share-button print-button"
+                  type="button"
+                  data-share-action="print"
+                  aria-label="Print article"
+                  title="Print article"
+                >
+                  <Printer size={18} strokeWidth={2} aria-hidden="true" />
+                </button>
+              </div>
+              <span class="share-status" aria-live="polite" data-share-status></span>
+            </div>
+          </div>
+        </header>
+      </div>
+
+      <div class="article-layout">
+        <div class="article-main">
+        <section class="reading-surface" aria-label="Article body">
+          <div class="article-prose">
+            {hasBody ? (
+              <PortableText value={article.body!} />
+            ) : article.description ? (
+              <p>{article.description}</p>
+            ) : (
+              <p class="body-placeholder">
+                The full story is being prepared. Add it from the Article Body
+                field in Sanity Studio.
+              </p>
+            )}
+          </div>
+        </section>
+
+        <footer class="article-footer">
+          <a href="/">&larr; Back to latest news</a>
+          <span>Published by TechBubble</span>
+        </footer>
+        </div>
+
+      <aside class="article-sidebar" aria-label="Article sidebar">
+        <div class="sidebar-sticky">
+          <section class="sidebar-ad" aria-label="Advertisement">
+            <span class="rail-label">Advertisement</span>
+            <a class="square-ad" href="/agency" aria-label="Visit TechBubble Agency">
+              <img
+                src="/images/ad.jpg"
+                alt="TechBubble AI Art creative services"
+                width="1080"
+                height="1080"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+            <a class="ad-followup" href="/agency">Explore TechBubble Agency</a>
+          </section>
+
+          {relatedStories.length > 0 && (
+            <section class="related-news" aria-labelledby="related-news-title">
+              <div class="rail-heading">
+                <span>Latest</span>
+                <h2 id="related-news-title">More stories</h2>
+              </div>
+
+              <div class="related-list">
+                {relatedStories.map((story) => (
+                  <a class="related-card" href={story.href}>
+                    <span class="related-copy">
+                      <span class="related-category">
+                        {story.category || "Technology"}
+                      </span>
+                      <strong>{story.title}</strong>
+                      {story.formattedDate && (
+                        <time datetime={story.publishedAt}>{story.formattedDate}</time>
+                      )}
+                    </span>
+
+                    {story.imageUrl ? (
+                      <img
+                        src={story.imageUrl}
+                        srcset={story.imageSrcSet}
+                        sizes="112px"
+                        alt=""
+                        width="360"
+                        height="240"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      <span class="related-image-fallback" aria-hidden="true">
+                        TB
+                      </span>
+                    )}
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+      </aside>
+      </div>
+    </article>
+  </main>
+</SiteLayout>
+
+<script>
+  const shareSelector = "[data-share-root]";
+
+  function fallbackCopy(text: string) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.setAttribute("readonly", "");
+    textArea.style.position = "fixed";
+    textArea.style.opacity = "0";
+    document.body.appendChild(textArea);
+    textArea.select();
+    const copied = document.execCommand("copy");
+    textArea.remove();
+
+    if (!copied) throw new Error("Copy was unavailable");
+  }
+
+  async function copyArticleUrl(url: string) {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(url);
+      return;
+    }
+
+    fallbackCopy(url);
+  }
+
+  function initialiseArticleShare(root: HTMLElement) {
+    if (root.dataset.initialised === "true") return;
+    root.dataset.initialised = "true";
+
+    const status = root.querySelector<HTMLElement>("[data-share-status]");
+    const title = root.dataset.shareTitle || document.title;
+
+    const announce = (message: string) => {
+      if (status) status.textContent = message;
+    };
+
+    const openShareWindow = (url: string) => {
+      const shareWindow = window.open(
+        url,
+        "article-share",
+        "noopener,noreferrer,width=720,height=620",
+      );
+
+      if (shareWindow) shareWindow.opener = null;
+    };
+
+    root.addEventListener("click", async (event) => {
+      if (!(event.target instanceof Element)) return;
+
+      const button = event.target.closest<HTMLButtonElement>(
+        "[data-share-action]",
+      );
+      if (!button || !root.contains(button)) return;
+
+      const pageUrl = window.location.href;
+      const encodedUrl = encodeURIComponent(pageUrl);
+      const encodedTitle = encodeURIComponent(title);
+
+      try {
+        switch (button.dataset.shareAction) {
+          case "facebook":
+            openShareWindow(
+              `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+            );
+            announce("Facebook share window opened.");
+            break;
+          case "x":
+            openShareWindow(
+              `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
+            );
+            announce("X share window opened.");
+            break;
+          case "native":
+            if (navigator.share) {
+              await navigator.share({ title, url: pageUrl });
+              announce("Article shared.");
+            } else {
+              await copyArticleUrl(pageUrl);
+              announce("Article link copied.");
+            }
+            break;
+          case "copy":
+            await copyArticleUrl(pageUrl);
+            announce("Article link copied.");
+            break;
+          case "print":
+            window.print();
+            break;
+        }
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        announce("That action was unavailable. Please try again.");
+      }
+    });
+  }
+
+  function initialiseArticleShareControls() {
+    document
+      .querySelectorAll<HTMLElement>(shareSelector)
+      .forEach(initialiseArticleShare);
+  }
+
+  initialiseArticleShareControls();
+  document.addEventListener("astro:page-load", initialiseArticleShareControls);
+</script>

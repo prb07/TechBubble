@@ -1,0 +1,162 @@
+html[data-reading-mode="soft"] {
+  color-scheme: light;
+  --reader-page: #faf7ff;
+  --reader-surface: rgba(255, 253, 251, 0.94);
+  --reader-text: #29233f;
+  --reader-muted: #686176;
+  --reader-accent: #6d4aff;
+  --reader-border: rgba(109, 74, 255, 0.16);
+  --reader-shadow: 0 24px 70px rgba(67, 47, 145, 0.1);
+  --reader-font-size: 19px;
+  --reader-line-height: 1.82;
+  --reader-width: 68ch;
+  --site-background:
+    radial-gradient(
+      circle at 15% 55%,
+      rgba(255, 185, 210, 0.28),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 85% 45%,
+      rgba(190, 170, 255, 0.3),
+      transparent 32%
+    ),
+    linear-gradient(135deg, #fffaf8 0%, #ffffff 45%, #faf5ff 100%);
+  --appbar-background: rgba(255, 255, 255, 0.68);
+  --appbar-border: rgba(80, 60, 150, 0.1);
+  --appbar-text: #21184f;
+  --appbar-muted: #73738a;
+  --appbar-accent: #6d4aff;
+}
+
+html[data-reading-mode="paper"] {
+  color-scheme: light;
+  --reader-page: #eadfc9;
+  --reader-surface: rgba(248, 239, 223, 0.97);
+  --reader-text: #362f27;
+  --reader-muted: #655b4e;
+  --reader-accent: #5d3ee0;
+  --reader-border: rgba(88, 68, 42, 0.18);
+  --reader-shadow: 0 24px 70px rgba(74, 58, 37, 0.12);
+  --reader-font-size: 20px;
+  --reader-line-height: 1.9;
+  --reader-width: 64ch;
+  --site-background:
+    radial-gradient(
+      circle at 14% 45%,
+      rgba(169, 123, 77, 0.15),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 86% 30%,
+      rgba(128, 98, 175, 0.13),
+      transparent 34%
+    ),
+    linear-gradient(135deg, #e9ddc6, #f4ead7 52%, #e4d7c0);
+  --site-blob-left: linear-gradient(
+    135deg,
+    rgba(218, 192, 151, 0.45),
+    rgba(255, 245, 224, 0.1)
+  );
+  --site-blob-right: linear-gradient(
+    135deg,
+    rgba(199, 180, 160, 0.45),
+    rgba(240, 226, 202, 0.12)
+  );
+  --appbar-background: rgba(248, 239, 223, 0.82);
+  --appbar-border: rgba(88, 68, 42, 0.14);
+  --appbar-text: #362f27;
+  --appbar-muted: #655b4e;
+  --appbar-accent: #5d3ee0;
+}
+
+html[data-reading-mode="night"] {
+  color-scheme: dark;
+  --reader-page: #090711;
+  --reader-surface: rgba(23, 17, 40, 0.94);
+  --reader-surface-raised: rgba(32, 23, 55, 0.96);
+  --reader-card-background: linear-gradient(
+    145deg,
+    rgba(30, 21, 53, 0.98),
+    rgba(15, 11, 29, 0.98)
+  );
+  --reader-card-border: rgba(171, 135, 255, 0.28);
+  --reader-text: #f8f5ff;
+  --reader-muted: #aaa2c2;
+  --reader-accent: #a58aff;
+  --reader-accent-strong: #7455ff;
+  --reader-pink: #ff79bd;
+  --reader-border: rgba(164, 130, 255, 0.2);
+  --reader-shadow:
+    0 28px 90px rgba(4, 2, 14, 0.58),
+    0 12px 42px rgba(109, 74, 255, 0.1);
+  --reader-card-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    0 30px 90px rgba(4, 2, 14, 0.52),
+    0 12px 46px rgba(109, 74, 255, 0.11);
+  --reader-popover-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 24px 70px rgba(3, 1, 12, 0.68),
+    0 0 44px rgba(109, 74, 255, 0.1);
+  --reader-font-size: 19px;
+  --reader-line-height: 1.88;
+  --reader-width: 66ch;
+  --site-background:
+    radial-gradient(
+      circle at 12% 18%,
+      rgba(109, 74, 255, 0.3),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 88% 28%,
+      rgba(255, 121, 189, 0.15),
+      transparent 31%
+    ),
+    radial-gradient(
+      circle at 52% 105%,
+      rgba(72, 42, 150, 0.24),
+      transparent 42%
+    ),
+    linear-gradient(135deg, #080610 0%, #100a20 52%, #090714 100%);
+  --site-blob-left: linear-gradient(
+    135deg,
+    rgba(126, 78, 255, 0.22),
+    rgba(239, 94, 190, 0.07)
+  );
+  --site-blob-right: linear-gradient(
+    135deg,
+    rgba(91, 74, 210, 0.24),
+    rgba(28, 21, 62, 0.06)
+  );
+  --site-blob-opacity: 0.88;
+  --site-circle-background: radial-gradient(
+    circle at 30% 20%,
+    rgba(213, 188, 255, 0.2),
+    rgba(109, 74, 255, 0.075) 64%,
+    rgba(255, 121, 189, 0.045)
+  );
+  --site-circle-border: rgba(189, 158, 255, 0.22);
+  --site-circle-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 24px 70px rgba(75, 35, 154, 0.15);
+  --site-noise-opacity: 0.032;
+  --appbar-background: rgba(12, 8, 27, 0.78);
+  --appbar-border: rgba(169, 133, 255, 0.2);
+  --appbar-text: #f8f5ff;
+  --appbar-muted: #aaa2c2;
+  --appbar-accent: #ae92ff;
+  --appbar-shadow:
+    inset 0 -1px 0 rgba(174, 146, 255, 0.045),
+    0 14px 42px rgba(3, 1, 12, 0.3);
+  --promo-background: linear-gradient(
+    105deg,
+    rgba(30, 20, 53, 0.97),
+    rgba(50, 29, 91, 0.94) 55%,
+    rgba(15, 42, 65, 0.92)
+  );
+  --promo-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 16px 44px rgba(4, 2, 14, 0.42),
+    0 7px 26px rgba(109, 74, 255, 0.11);
+  --promo-orb: rgba(164, 116, 255, 0.19);
+}

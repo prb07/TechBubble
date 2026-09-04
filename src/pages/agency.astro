@@ -1,0 +1,28 @@
+---
+import ComingSoon from "../components/ComingSoon.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout
+  title="Agency | TechBubble"
+  description="TechBubble Agency is coming soon."
+  bodyClass="coming-soon-page"
+  skipHref="#coming-soon-content"
+  skipLabel="Skip to page content"
+>
+  <ComingSoon section="Agency" />
+</SiteLayout>
+
+<style is:global>
+  * {
+    box-sizing: border-box;
+  }
+
+  body.coming-soon-page {
+    min-width: 320px;
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+    background: var(--site-background, var(--reader-page, #faf7ff));
+  }
+</style>

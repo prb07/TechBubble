@@ -1,317 +1,193 @@
 <div class="trend-wrapper">
+  <div class="side-gap"></div>
 
+  <div class="trend-window">
+    <div class="trend-track">
+      <div class="trend-card">
+        <img src="/images/ai.webp">
+        <div>
+          <b>AI</b>
+          <p>The next wave of intelligent apps</p>
+        </div>
+      </div>
 
-<div class="side-gap"></div>
+      <div class="trend-card">
+        <img src="/images/cyber.webp">
+        <div>
+          <b>Cybersecurity</b>
+          <p>Zero trust is the new standard</p>
+        </div>
+      </div>
 
+      <div class="trend-card">
+        <img src="/images/startup.webp">
+        <div>
+          <b>Startups</b>
+          <p>Funding trends to watch</p>
+        </div>
+      </div>
 
-<div class="trend-window">
+      <div class="trend-card">
+        <img src="/images/gadget.webp">
+        <div>
+          <b>Gadgets</b>
+          <p>Top 10 must-have tech</p>
+        </div>
+      </div>
 
-<div class="trend-track">
+      <div class="trend-card">
+        <img src="/images/software.webp">
+        <div>
+          <b>Software</b>
+          <p>Open source tools worth trying</p>
+        </div>
+      </div>
 
+      <div class="trend-card">
+        <img src="/images/design.webp">
+        <div>
+          <b>Web Design</b>
+          <p>Design systems that scale</p>
+        </div>
+      </div>
 
-<div class="trend-card">
-<img src="/images/ai.webp">
-<div>
-<b>AI</b>
-<p>The next wave of intelligent apps</p>
+      <div class="trend-card">
+        <img src="/images/product.webp">
+        <div>
+          <b>Product News</b>
+          <p>What's new in tech</p>
+        </div>
+      </div>
+
+      <!-- duplicate -->
+      <div class="trend-card">
+        <img src="/images/ai.webp">
+        <div>
+          <b>AI</b>
+          <p>The next wave of intelligent apps</p>
+        </div>
+      </div>
+
+      <div class="trend-card">
+        <img src="/images/cyber.webp">
+        <div>
+          <b>Cybersecurity</b>
+          <p>Zero trust is the new standard</p>
+        </div>
+      </div>
+
+      <div class="trend-card">
+        <img src="/images/startup.webp">
+        <div>
+          <b>Startups</b>
+          <p>Funding trends to watch</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="side-gap"></div>
 </div>
-</div>
-
-
-<div class="trend-card">
-<img src="/images/cyber.webp">
-<div>
-<b>Cybersecurity</b>
-<p>Zero trust is the new standard</p>
-</div>
-</div>
-
-
-<div class="trend-card">
-<img src="/images/startup.webp">
-<div>
-<b>Startups</b>
-<p>Funding trends to watch</p>
-</div>
-</div>
-
-
-<div class="trend-card">
-<img src="/images/gadget.webp">
-<div>
-<b>Gadgets</b>
-<p>Top 10 must-have tech</p>
-</div>
-</div>
-
-
-<div class="trend-card">
-<img src="/images/software.webp">
-<div>
-<b>Software</b>
-<p>Open source tools worth trying</p>
-</div>
-</div>
-
-
-<div class="trend-card">
-<img src="/images/design.webp">
-<div>
-<b>Web Design</b>
-<p>Design systems that scale</p>
-</div>
-</div>
-
-
-<div class="trend-card">
-<img src="/images/product.webp">
-<div>
-<b>Product News</b>
-<p>What's new in tech</p>
-</div>
-</div>
-
-
-
-<!-- duplicate -->
-
-<div class="trend-card">
-<img src="/images/ai.webp">
-<div>
-<b>AI</b>
-<p>The next wave of intelligent apps</p>
-</div>
-</div>
-
-
-<div class="trend-card">
-<img src="/images/cyber.webp">
-<div>
-<b>Cybersecurity</b>
-<p>Zero trust is the new standard</p>
-</div>
-</div>
-
-
-<div class="trend-card">
-<img src="/images/startup.webp">
-<div>
-<b>Startups</b>
-<p>Funding trends to watch</p>
-</div>
-</div>
-
-
-</div>
-
-</div>
-
-
-
-<div class="side-gap"></div>
-
-
-</div>
-
-
 
 <style>
-
-
-.trend-wrapper{
-
-width:100%;
-
-display:flex;
-
-align-items:center;
-
-gap:15px;
-
-margin-top:18px;
-
-
-}
-
-
-
-/* arrow জায়গার empty space */
-
-.side-gap{
-
-width:55px;
-
-flex-shrink:0;
-
-}
-
-
-
-/* main bar */
-
-.trend-window{
-
-
-flex:1;
-
-
-overflow:hidden;
-
-
-border-radius:18px;
-
-
-background:
-
-rgba(255,255,255,.45);
-
-
-border:
-
-1px solid rgba(120,90,180,.12);
-
-
-backdrop-filter:
-
-blur(20px);
-
-
-}
-
-
-
-.trend-track{
-
-display:flex;
-
-width:max-content;
-
-
-animation:
-
-scroll 35s linear infinite;
-
-
-}
-
-
-
-.trend-window:hover .trend-track{
-
-animation-play-state:paused;
-
-}
-
-
-
-.trend-card{
-
-
-height:75px;
-
-
-min-width:240px;
-
-
-display:flex;
-
-align-items:center;
-
-
-gap:15px;
-
-
-padding:10px 20px;
-
-
-border-right:
-
-1px solid rgba(120,90,180,.12);
-
-
-}
-
-
-
-.trend-card img{
-
-
-width:55px;
-
-height:55px;
-
-
-border-radius:12px;
-
-
-object-fit:cover;
-
-
-}
-
-
-
-.trend-card b{
-
-font-size:14px;
-
-font-weight:700;
-
-color:#21184f;
-
-}
-
-
-
-.trend-card p{
-
-font-size:11px;
-
-color:#77758a;
-
-margin-top:4px;
-
-}
-
-
-
-@keyframes scroll{
-
-
-from{
-
-transform:translateX(0);
-
-}
-
-
-to{
-
-transform:translateX(-50%);
-
-}
-
-
-}
-
-
-
-@media(max-width:768px){
-
-.side-gap{
-
-width:15px;
-
-}
-
-
-.trend-card{
-
-min-width:210px;
-
-}
-
-}
-
-
+  .trend-wrapper {
+    width: 100%;
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .side-gap {
+    width: 55px;
+    flex-shrink: 0;
+  }
+
+  .trend-window {
+    flex: 1;
+    overflow: hidden;
+    border: 1px solid rgba(120, 90, 180, 0.12);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(20px);
+  }
+
+  .trend-track {
+    width: max-content;
+    display: flex;
+    animation: scroll 35s linear infinite;
+  }
+
+  .trend-window:hover .trend-track {
+    animation-play-state: paused;
+  }
+
+  .trend-card {
+    min-width: 240px;
+    height: 75px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-right: 1px solid rgba(120, 90, 180, 0.12);
+  }
+
+  .trend-card img {
+    width: 55px;
+    height: 55px;
+    border-radius: 12px;
+    object-fit: cover;
+  }
+
+  .trend-card b {
+    color: #21184f;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .trend-card p {
+    margin-top: 4px;
+    color: #77758a;
+    font-size: 11px;
+  }
+
+  :global(html[data-reading-mode="night"]) .trend-window {
+    border-color: rgba(174, 146, 255, 0.3);
+    background: rgba(18, 12, 36, 0.94);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.055),
+      0 14px 38px rgba(3, 1, 12, 0.34);
+  }
+
+  :global(html[data-reading-mode="night"]) .trend-card {
+    border-right-color: rgba(174, 146, 255, 0.2);
+  }
+
+  :global(html[data-reading-mode="night"]) .trend-card b {
+    color: #f8f5ff;
+  }
+
+  :global(html[data-reading-mode="night"]) .trend-card p {
+    color: #bdb5d1;
+  }
+
+  @keyframes scroll {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .side-gap {
+      width: 15px;
+    }
+
+    .trend-card {
+      min-width: 210px;
+    }
+  }
 </style>

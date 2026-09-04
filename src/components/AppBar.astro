@@ -1,492 +1,839 @@
+---
+const currentPath = Astro.url.pathname;
+const isNewsPage = currentPath === "/" || currentPath.startsWith("/article/");
+const isAgencyPage =
+  currentPath.startsWith("/agency") ||
+  currentPath.startsWith("/start-a-project");
+const isAboutPage = currentPath.startsWith("/about");
+---
+
 <header class="appbar">
+  <div class="container">
+    <a href="/" class="logo">
+      <div class="logo-icon" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
 
-<div class="container">
+      <div class="logo-text">
+        <span class="logo-name">Tech<span>Bubble</span></span>
+        <small>BLOG + AGENCY</small>
+      </div>
+    </a>
 
+    <nav aria-label="Primary navigation">
+      <a href="/" aria-current={isNewsPage ? "page" : undefined}>News</a>
+      <a href="/agency" aria-current={isAgencyPage ? "page" : undefined}>Agency</a>
+      <a href="/about" aria-current={isAboutPage ? "page" : undefined}>About</a>
+    </nav>
 
-<!-- Logo -->
+    <div class="actions">
+      <div class="reading-mode-control" data-reading-mode-control>
+        <button
+          class="reading-mode-trigger"
+          type="button"
+          popovertarget="reading-mode-popover"
+          aria-label="Reading mode: Soft. Choose reading mode"
+          title="Choose reading mode"
+          data-reading-mode-trigger
+        >
+          <svg class="reading-eye" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path>
+            <circle cx="12" cy="12" r="2.8"></circle>
+          </svg>
+          <span class="current-mode-swatch" aria-hidden="true"></span>
+          <span class="reading-mode-label" data-reading-mode-label>Soft</span>
+          <svg class="reading-chevron" viewBox="0 0 20 20" aria-hidden="true">
+            <path d="m6 8 4 4 4-4"></path>
+          </svg>
+        </button>
 
-<a href="/" class="logo">
+        <div
+          class="reading-mode-popover"
+          id="reading-mode-popover"
+          popover="auto"
+          aria-labelledby="reading-mode-title"
+          data-reading-mode-popover
+        >
+          <div class="popover-heading">
+            <span class="popover-eye" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path>
+                <circle cx="12" cy="12" r="2.8"></circle>
+              </svg>
+            </span>
+            <span>
+              <strong id="reading-mode-title">Eye comfort</strong>
+              <small>Choose your reading appearance</small>
+            </span>
+          </div>
 
-<div class="logo-icon">
+          <div class="mode-buttons" role="group" aria-label="Reading mode">
+            <button
+              class="mode-button"
+              type="button"
+              data-reading-mode-option="soft"
+              aria-pressed="true"
+            >
+              <span class="mode-swatch soft-swatch" aria-hidden="true"></span>
+              <span class="mode-copy">
+                <strong>Soft</strong>
+                <small>Clean, gentle light</small>
+              </span>
+              <svg class="mode-check" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m5 10 3 3 7-7"></path>
+              </svg>
+            </button>
 
-<span></span>
-<span></span>
-<span></span>
+            <button
+              class="mode-button"
+              type="button"
+              data-reading-mode-option="paper"
+              aria-pressed="false"
+            >
+              <span class="mode-swatch paper-swatch" aria-hidden="true"></span>
+              <span class="mode-copy">
+                <strong>Paper</strong>
+                <small>Warm, low-glare sepia</small>
+              </span>
+              <svg class="mode-check" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m5 10 3 3 7-7"></path>
+              </svg>
+            </button>
 
-</div>
+            <button
+              class="mode-button"
+              type="button"
+              data-reading-mode-option="night"
+              aria-pressed="false"
+            >
+              <span class="mode-swatch night-swatch" aria-hidden="true"></span>
+              <span class="mode-copy">
+                <strong>Night</strong>
+                <small>Comfortable in low light</small>
+              </span>
+              <svg class="mode-check" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m5 10 3 3 7-7"></path>
+              </svg>
+            </button>
+          </div>
 
+          <p class="sr-only" aria-live="polite" data-reading-mode-status></p>
+        </div>
+      </div>
 
-<div class="logo-text">
+      <button class="search" type="button" aria-label="Search">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle
+            cx="11"
+            cy="11"
+            r="7"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          ></circle>
+          <path
+            d="M16.5 16.5 21 21"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          ></path>
+        </svg>
+      </button>
 
-<h1>
-Tech<span>Bubble</span>
-</h1>
-
-<small>
-BLOG + AGENCY
-</small>
-
-</div>
-
-
-</a>
-
-
-
-<!-- Navigation -->
-
-<nav>
-
-<a href="/">
-News
-</a>
-
-
-<a href="/agency">
-Agency
-</a>
-
-
-<a href="/about">
-About
-</a>
-
-
-</nav>
-
-
-
-
-<!-- Right Actions -->
-
-<div class="actions">
-
-
-<button class="search">
-
-<svg viewBox="0 0 24 24">
-
-<circle 
-cx="11" 
-cy="11" 
-r="7"
-fill="none"
-stroke="currentColor"
-stroke-width="2"
-/>
-
-
-<path 
-d="M16.5 16.5L21 21"
-fill="none"
-stroke="currentColor"
-stroke-width="2"
-stroke-linecap="round"
-/>
-
-
-</svg>
-
-</button>
-
-
-
-<button class="menu">
-
-☰
-
-</button>
-
-
-</div>
-
-
-
-</div>
-
+      <button class="menu" type="button" aria-label="Open navigation menu">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
 </header>
 
+<!-- Keep the server-rendered label and pressed states in sync before paint. -->
+<script is:inline>
+  (() => {
+    const labels = { soft: "Soft", paper: "Paper", night: "Night" };
+    const requestedMode = document.documentElement.dataset.readingMode;
+    const mode = ["soft", "paper", "night"].includes(requestedMode)
+      ? requestedMode
+      : "soft";
+    const label = labels[mode];
 
+    document
+      .querySelectorAll("[data-reading-mode-control]")
+      .forEach((control) => {
+        const trigger = control.querySelector("[data-reading-mode-trigger]");
+        const currentLabel = control.querySelector("[data-reading-mode-label]");
+
+        trigger?.setAttribute(
+          "aria-label",
+          `Reading mode: ${label}. Choose reading mode`,
+        );
+
+        if (currentLabel) currentLabel.textContent = label;
+
+        control
+          .querySelectorAll("[data-reading-mode-option]")
+          .forEach((button) => {
+            button.setAttribute(
+              "aria-pressed",
+              String(button.dataset.readingModeOption === mode),
+            );
+          });
+      });
+  })();
+</script>
+
+<script>
+  const READING_MODE_KEY = "techbubble-reading-mode";
+  const READING_MODES = ["soft", "paper", "night"] as const;
+  const READING_MODE_LABELS = {
+    soft: "Soft",
+    paper: "Paper",
+    night: "Night",
+  } as const;
+
+  type ReadingMode = (typeof READING_MODES)[number];
+
+  const isReadingMode = (value: string | null | undefined): value is ReadingMode =>
+    READING_MODES.some((mode) => mode === value);
+
+  const getCurrentMode = (): ReadingMode => {
+    const mode = document.documentElement.dataset.readingMode;
+    return isReadingMode(mode) ? mode : "soft";
+  };
+
+  function syncReadingModeControls(mode: ReadingMode) {
+    document
+      .querySelectorAll<HTMLElement>("[data-reading-mode-control]")
+      .forEach((control) => {
+        const trigger = control.querySelector<HTMLButtonElement>(
+          "[data-reading-mode-trigger]",
+        );
+        const currentLabel = control.querySelector<HTMLElement>(
+          "[data-reading-mode-label]",
+        );
+        const label = READING_MODE_LABELS[mode];
+
+        if (trigger) {
+          trigger.setAttribute(
+            "aria-label",
+            `Reading mode: ${label}. Choose reading mode`,
+          );
+        }
+
+        if (currentLabel) currentLabel.textContent = label;
+
+        control
+          .querySelectorAll<HTMLButtonElement>("[data-reading-mode-option]")
+          .forEach((button) => {
+            button.setAttribute(
+              "aria-pressed",
+              String(button.dataset.readingModeOption === mode),
+            );
+          });
+      });
+  }
+
+  function applyReadingMode(
+    requestedMode: string | null | undefined,
+    persist = true,
+    announce = false,
+  ) {
+    const mode: ReadingMode = isReadingMode(requestedMode)
+      ? requestedMode
+      : "soft";
+
+    document.documentElement.dataset.readingMode = mode;
+    syncReadingModeControls(mode);
+
+    if (persist) {
+      try {
+        localStorage.setItem(READING_MODE_KEY, mode);
+      } catch {
+        // The mode still applies to the current page when storage is blocked.
+      }
+    }
+
+    if (announce) {
+      document
+        .querySelectorAll<HTMLElement>("[data-reading-mode-status]")
+        .forEach((status) => {
+          status.textContent = `${READING_MODE_LABELS[mode]} reading mode applied.`;
+        });
+    }
+  }
+
+  function initialiseReadingModeControl(control: HTMLElement) {
+    if (control.dataset.initialised === "true") return;
+    control.dataset.initialised = "true";
+
+    const trigger = control.querySelector<HTMLButtonElement>(
+      "[data-reading-mode-trigger]",
+    );
+    const popover = control.querySelector<HTMLElement>(
+      "[data-reading-mode-popover]",
+    );
+    const supportsPopover =
+      typeof HTMLElement.prototype.showPopover === "function";
+
+    const setFallbackOpen = (open: boolean) => {
+      if (!trigger || !popover || supportsPopover) return;
+
+      popover.toggleAttribute("data-fallback-open", open);
+      trigger.setAttribute("aria-expanded", String(open));
+    };
+
+    if (trigger && popover && !supportsPopover) {
+      trigger.setAttribute("aria-expanded", "false");
+      trigger.addEventListener("click", () => {
+        setFallbackOpen(popover.dataset.fallbackOpen !== "true");
+      });
+
+      document.addEventListener("click", (event) => {
+        if (
+          popover.dataset.fallbackOpen === "true" &&
+          event.target instanceof Node &&
+          !control.contains(event.target)
+        ) {
+          setFallbackOpen(false);
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (
+          event.key === "Escape" &&
+          popover.dataset.fallbackOpen === "true"
+        ) {
+          setFallbackOpen(false);
+          trigger.focus();
+        }
+      });
+    }
+
+    control
+      .querySelectorAll<HTMLButtonElement>("[data-reading-mode-option]")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          applyReadingMode(button.dataset.readingModeOption, true, true);
+
+          if (popover && typeof popover.hidePopover === "function") {
+            popover.hidePopover();
+          } else {
+            setFallbackOpen(false);
+          }
+
+          trigger?.focus();
+        });
+      });
+  }
+
+  function initialiseReadingModeControls() {
+    document
+      .querySelectorAll<HTMLElement>("[data-reading-mode-control]")
+      .forEach(initialiseReadingModeControl);
+
+    applyReadingMode(getCurrentMode(), false);
+  }
+
+  initialiseReadingModeControls();
+  document.addEventListener("astro:page-load", initialiseReadingModeControls);
+
+  window.addEventListener("storage", (event) => {
+    if (event.key === READING_MODE_KEY) {
+      applyReadingMode(event.newValue, false);
+    }
+  });
+</script>
 
 <style>
-
-
-.appbar{
-
-position:relative;
-
-z-index:20;
-
-}
-
-
-
-.container{
-
-
-height:82px;
-
-max-width:1320px;
-
-margin:auto;
-
-
-padding:0 45px;
-
-
-display:flex;
-
-align-items:center;
-
-justify-content:space-between;
-
-
-
-background:
-
-rgba(255,255,255,.25);
-
-
-backdrop-filter:
-
-blur(20px);
-
-
-
-border-bottom:
-
-1px solid rgba(80,60,150,.08);
-
-
-}
-
-
-
-/* LOGO */
-
-
-.logo{
-
-display:flex;
-
-align-items:center;
-
-gap:12px;
-
-text-decoration:none;
-
-
-}
-
-
-
-.logo-text h1{
-
-
-margin:0;
-
-
-font-size:28px;
-
-
-line-height:1;
-
-
-letter-spacing:-1px;
-
-
-font-weight:800;
-
-
-color:#21184f;
-
-
-}
-
-
-
-.logo-text h1 span{
-
-
-color:#725cff;
-
-
-}
-
-
-
-.logo-text small{
-
-
-display:block;
-
-
-margin-top:3px;
-
-
-font-size:9px;
-
-
-letter-spacing:2px;
-
-
-font-weight:700;
-
-
-color:#73738a;
-
-
-}
-
-
-
-/* LOGO ICON */
-
-
-.logo-icon{
-
-
-position:relative;
-
-
-width:38px;
-
-height:38px;
-
-
-}
-
-
-
-.logo-icon span{
-
-
-position:absolute;
-
-
-width:14px;
-
-height:26px;
-
-
-border-radius:10px;
-
-
-background:
-
-linear-gradient(
-180deg,
-#7b5cff,
-#b46cff
-);
-
-
-transform:rotate(35deg);
-
-
-}
-
-
-
-.logo-icon span:nth-child(1){
-
-left:2px;
-
-top:8px;
-
-}
-
-
-
-.logo-icon span:nth-child(2){
-
-left:14px;
-
-top:0;
-
-background:
-
-linear-gradient(
-180deg,
-#ff9dd5,
-#7b5cff
-);
-
-}
-
-
-
-.logo-icon span:nth-child(3){
-
-left:25px;
-
-top:10px;
-
-height:22px;
-
-}
-
-
-
-/* NAVIGATION */
-
-
-nav{
-
-
-display:flex;
-
-
-align-items:center;
-
-
-gap:45px;
-
-
-}
-
-
-
-nav a{
-
-
-font-size:14px;
-
-
-font-weight:600;
-
-
-color:#252044;
-
-
-text-decoration:none;
-
-
-opacity:.95;
-
-
-transition:.25s;
-
-
-}
-
-
-
-nav a:hover{
-
-
-color:#6d4aff;
-
-
-}
-
-
-
-
-/* ACTIONS */
-
-
-.actions{
-
-
-display:flex;
-
-
-align-items:center;
-
-
-gap:25px;
-
-
-}
-
-
-
-.search{
-
-
-width:28px;
-
-height:28px;
-
-
-border:none;
-
-
-background:none;
-
-
-color:#21184f;
-
-
-padding:0;
-
-
-}
-
-
-
-.search svg{
-
-width:100%;
-
-height:100%;
-
-
-}
-
-
-
-.menu{
-
-display:none;
-
-font-size:25px;
-
-color:#21184f;
-
-}
-
-
-
-
-
-/* TABLET */
-
-
-@media(max-width:900px){
-
-
-.container{
-
-padding:0 20px;
-
-}
-
-
-nav{
-
-display:none;
-
-}
-
-
-.menu{
-
-display:block;
-
-}
-
-
-.logo-text h1{
-
-font-size:23px;
-
-}
-
-
-}
-
-
-
+  .appbar {
+    position: relative;
+    z-index: 20;
+  }
+
+  .container {
+    height: 82px;
+    max-width: 1320px;
+    margin: auto;
+    padding: 0 45px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--appbar-background, rgba(255, 255, 255, 0.25));
+    border-bottom: 1px solid var(--appbar-border, rgba(80, 60, 150, 0.08));
+    box-shadow: var(--appbar-shadow, none);
+    backdrop-filter: blur(20px);
+    transition:
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .logo-name {
+    display: block;
+    margin: 0;
+    color: var(--appbar-text, #21184f);
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+
+  .logo-name span {
+    color: var(--appbar-accent, #725cff);
+  }
+
+  .logo-text small {
+    display: block;
+    margin-top: 3px;
+    color: var(--appbar-muted, #73738a);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+
+  .logo-icon {
+    position: relative;
+    width: 38px;
+    height: 38px;
+  }
+
+  .logo-icon span {
+    position: absolute;
+    width: 14px;
+    height: 26px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #7b5cff, #b46cff);
+    transform: rotate(35deg);
+  }
+
+  .logo-icon span:nth-child(1) {
+    top: 8px;
+    left: 2px;
+  }
+
+  .logo-icon span:nth-child(2) {
+    top: 0;
+    left: 14px;
+    background: linear-gradient(180deg, #ff9dd5, #7b5cff);
+  }
+
+  .logo-icon span:nth-child(3) {
+    top: 10px;
+    left: 25px;
+    height: 22px;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 45px;
+  }
+
+  nav a {
+    color: var(--appbar-text, #252044);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    opacity: 0.95;
+    transition: color 0.25s ease;
+  }
+
+  nav a:hover,
+  nav a[aria-current="page"] {
+    color: var(--appbar-accent, #6d4aff);
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .reading-mode-control {
+    display: flex;
+  }
+
+  .reading-mode-trigger,
+  .search,
+  .menu {
+    border: 0;
+    background: transparent;
+    color: var(--appbar-text, #21184f);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .reading-mode-trigger {
+    min-width: 108px;
+    height: 42px;
+    padding: 0 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: 1px solid var(--appbar-border, rgba(80, 60, 150, 0.12));
+    border-radius: 13px;
+    background: color-mix(
+      in srgb,
+      var(--appbar-background, #fff) 78%,
+      transparent
+    );
+    color: var(--appbar-text, #21184f);
+    font-size: 12px;
+    font-weight: 750;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .reading-mode-trigger:hover {
+    border-color: color-mix(
+      in srgb,
+      var(--appbar-accent, #6d4aff) 35%,
+      transparent
+    );
+    background: color-mix(
+      in srgb,
+      var(--appbar-accent, #6d4aff) 9%,
+      var(--appbar-background, #fff)
+    );
+  }
+
+  .reading-eye {
+    width: 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+  }
+
+  .current-mode-swatch {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 auto;
+    border: 1px solid var(--reader-border, rgba(68, 57, 95, 0.18));
+    border-radius: 50%;
+    background: var(--reader-page, #fffaf5);
+  }
+
+  .reading-chevron {
+    width: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+  }
+
+  .reading-mode-popover {
+    position: fixed;
+    inset: 72px max(20px, calc((100vw - 1320px) / 2 + 45px)) auto auto;
+    width: min(284px, calc(100vw - 32px));
+    max-height: calc(
+      100dvh - 84px - env(safe-area-inset-bottom, 0px)
+    );
+    margin: 0;
+    padding: 14px;
+    display: none;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 1px solid var(--reader-border, rgba(109, 74, 255, 0.16));
+    border-radius: 20px;
+    background: var(
+      --reader-surface-raised,
+      var(--reader-surface, rgba(255, 253, 251, 0.98))
+    );
+    box-shadow: var(
+      --reader-popover-shadow,
+      0 22px 60px rgba(32, 24, 68, 0.22)
+    );
+    color: var(--reader-text, #29233f);
+    font-family:
+      Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    animation: popover-in 150ms ease-out;
+    backdrop-filter: blur(22px);
+  }
+
+  .reading-mode-popover:popover-open {
+    display: block;
+  }
+
+  .reading-mode-popover[data-fallback-open="true"] {
+    display: block;
+  }
+
+  .reading-mode-popover::backdrop {
+    background: transparent;
+  }
+
+  .popover-heading {
+    padding: 3px 4px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .popover-heading strong,
+  .popover-heading small,
+  .mode-copy strong,
+  .mode-copy small {
+    display: block;
+  }
+
+  .popover-heading strong {
+    color: var(--reader-text, #29233f);
+    font-size: 13px;
+  }
+
+  .popover-heading small {
+    margin-top: 2px;
+    color: var(--reader-muted, #686176);
+    font-size: 10px;
+  }
+
+  .popover-eye {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: 11px;
+    background: color-mix(
+      in srgb,
+      var(--reader-accent, #6d4aff) 12%,
+      transparent
+    );
+    color: var(--reader-accent, #6d4aff);
+  }
+
+  .popover-eye svg {
+    width: 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+  }
+
+  .mode-buttons {
+    display: grid;
+    gap: 6px;
+  }
+
+  .mode-button {
+    width: 100%;
+    min-height: 52px;
+    padding: 8px 10px;
+    display: grid;
+    grid-template-columns: 14px minmax(0, 1fr) 18px;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid transparent;
+    border-radius: 13px;
+    background: transparent;
+    color: var(--reader-muted, #686176);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .mode-button:hover {
+    background: color-mix(
+      in srgb,
+      var(--reader-accent, #6d4aff) 8%,
+      transparent
+    );
+  }
+
+  .mode-button[aria-pressed="true"] {
+    border-color: var(--reader-border, rgba(109, 74, 255, 0.16));
+    background: color-mix(
+      in srgb,
+      var(--reader-accent, #6d4aff) 12%,
+      var(--reader-surface, #fff)
+    );
+    color: var(--reader-text, #29233f);
+  }
+
+  .mode-swatch {
+    width: 13px;
+    height: 13px;
+    border: 1px solid rgba(68, 57, 95, 0.24);
+    border-radius: 50%;
+  }
+
+  .soft-swatch {
+    background: #fffaf5;
+  }
+
+  .paper-swatch {
+    background: #e4d4b5;
+  }
+
+  .night-swatch {
+    background: #211e31;
+  }
+
+  .mode-copy strong {
+    color: inherit;
+    font-size: 12px;
+  }
+
+  .mode-copy small {
+    margin-top: 2px;
+    color: var(--reader-muted, #686176);
+    font-size: 10px;
+  }
+
+  .mode-check {
+    width: 17px;
+    fill: none;
+    stroke: var(--reader-accent, #6d4aff);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2.4;
+    opacity: 0;
+  }
+
+  .mode-button[aria-pressed="true"] .mode-check {
+    opacity: 1;
+  }
+
+  .search {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+  }
+
+  .search svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .menu {
+    width: 38px;
+    height: 38px;
+    padding: 7px;
+    display: none;
+    place-items: center;
+  }
+
+  .menu svg {
+    width: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-width: 1.8;
+  }
+
+  .reading-mode-trigger:focus-visible,
+  .mode-button:focus-visible,
+  .search:focus-visible,
+  .menu:focus-visible,
+  nav a:focus-visible,
+  .logo:focus-visible {
+    outline: 3px solid var(--appbar-accent, #6d4aff);
+    outline-offset: 3px;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @keyframes popover-in {
+    from {
+      opacity: 0;
+      transform: translateY(-5px) scale(0.98);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .container {
+      padding: 0 20px;
+    }
+
+    nav {
+      display: none;
+    }
+
+    .actions {
+      gap: 11px;
+    }
+
+    .reading-mode-trigger {
+      min-width: 42px;
+      width: 42px;
+      padding: 0;
+    }
+
+    .reading-mode-label,
+    .reading-chevron {
+      display: none;
+    }
+
+    .menu {
+      display: grid;
+    }
+
+    .logo-name {
+      font-size: 23px;
+    }
+
+    .reading-mode-popover {
+      right: 12px;
+      width: min(284px, calc(100vw - 24px));
+    }
+  }
+
+  @media (max-width: 520px) {
+    .container {
+      padding: 0 14px;
+    }
+
+    .logo {
+      gap: 8px;
+    }
+
+    .logo-name {
+      font-size: 21px;
+    }
+
+    .logo-text small {
+      letter-spacing: 1.5px;
+    }
+
+    .search {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .container,
+    .reading-mode-trigger,
+    .reading-mode-popover {
+      transition: none;
+      animation: none;
+    }
+  }
 </style>

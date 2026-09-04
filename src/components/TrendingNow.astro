@@ -1,0 +1,128 @@
+---
+import { defineQuery } from "groq";
+import type { SanityImageSource } from "@sanity/image-url";
+import ArticleCard from "./ArticleCard.astro";
+import { sanityClient, urlFor } from "../lib/sanity";
+
+interface TrendingArticle {
+  _id: string;
+  title: string;
+  slug: string;
+  category?: string;
+  author?: string;
+  readTime?: string;
+  image: SanityImageSource & {
+    alt?: string;
+  };
+}
+
+const TRENDING_ARTICLES_QUERY = defineQuery(/* groq */ `
+  *[
+    _type == "article" &&
+    defined(title) &&
+    defined(slug.current) &&
+    defined(image.asset)
+  ] | order(featured desc, _createdAt desc)[0...2] {
+    _id,
+    title,
+    "slug": slug.current,
+    category,
+    author,
+    readTime,
+    image {
+      asset,
+      alt,
+      hotspot,
+      crop
+    }
+  }
+`);
+
+let articles: TrendingArticle[] = [];
+
+try {
+  articles = await sanityClient.fetch<TrendingArticle[]>(TRENDING_ARTICLES_QUERY);
+} catch (error) {
+  console.error("Unable to load Sanity articles for Trending Now", error);
+}
+
+const cards = articles.map((article) => ({
+  ...article,
+  imageUrl: urlFor(article.image)
+    .width(720)
+    .height(500)
+    .fit("crop")
+    .auto("format")
+    .url(),
+}));
+---
+
+<section class="trending" aria-labelledby="trending-heading">
+  <h2 id="trending-heading">Trending Now</h2>
+
+  {cards.length > 0 ? (
+    <div class="cards">
+      {cards.map((article) => (
+        <div class="small">
+          <ArticleCard
+            image={article.imageUrl}
+            imageAlt={article.image.alt}
+            category={article.category || "Technology"}
+            title={article.title}
+            author={article.author}
+            time={article.readTime}
+            href={`/article/${encodeURIComponent(article.slug)}/`}
+          />
+        </div>
+      ))}
+    </div>
+  ) : (
+    <p class="empty-state">Trending stories are being prepared.</p>
+  )}
+</section>
+
+<style>
+  .trending h2 {
+    margin: 0 0 13px;
+    color: var(--reader-text, #21184f);
+    font-size: 20px;
+    letter-spacing: -0.025em;
+  }
+
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .small {
+    height: 190px;
+  }
+
+  .empty-state {
+    margin: 0;
+    padding: 24px;
+    border: 1px solid var(--reader-border, rgba(109, 74, 255, 0.12));
+    border-radius: 18px;
+    background: var(--reader-surface, rgba(255, 255, 255, 0.55));
+    color: var(--reader-muted, #68657c);
+    font-size: 14px;
+  }
+
+  @media (max-width: 900px) {
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .small {
+      height: 220px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .cards {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

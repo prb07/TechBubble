@@ -1,0 +1,143 @@
+---
+interface Props {
+  section: string;
+}
+
+const { section } = Astro.props;
+---
+
+<main id="coming-soon-content" class="coming-soon">
+  <section class="coming-soon__card" aria-labelledby="coming-soon-title">
+    <span class="coming-soon__mark" aria-hidden="true">TB</span>
+    <p class="coming-soon__eyebrow">{section}</p>
+    <h1 id="coming-soon-title">Coming Soon</h1>
+    <p class="coming-soon__copy">Stay tunes with TechBubble</p>
+
+    <a class="coming-soon__back" href="/">
+      Back to News <span aria-hidden="true">&rarr;</span>
+    </a>
+  </section>
+</main>
+
+<style>
+  .coming-soon {
+    position: relative;
+    z-index: 1;
+    min-height: calc(100svh - 82px);
+    padding: clamp(32px, 7vw, 88px) 20px;
+    display: grid;
+    place-items: center;
+    font-family:
+      Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  .coming-soon__card {
+    position: relative;
+    isolation: isolate;
+    width: min(620px, 100%);
+    padding: clamp(38px, 7vw, 68px);
+    overflow: hidden;
+    border: 1px solid var(--reader-border, rgba(109, 74, 255, 0.16));
+    border-radius: 28px;
+    background: var(--reader-card-background, var(--reader-surface, #fff));
+    box-shadow: var(--reader-card-shadow, var(--reader-shadow));
+    color: var(--reader-text, #29233f);
+    text-align: center;
+  }
+
+  .coming-soon__card::before,
+  .coming-soon__card::after {
+    position: absolute;
+    z-index: -1;
+    border-radius: 50%;
+    content: "";
+    filter: blur(2px);
+  }
+
+  .coming-soon__card::before {
+    top: -120px;
+    right: -95px;
+    width: 250px;
+    height: 250px;
+    background: rgba(109, 74, 255, 0.13);
+  }
+
+  .coming-soon__card::after {
+    bottom: -105px;
+    left: -85px;
+    width: 210px;
+    height: 210px;
+    background: rgba(255, 121, 189, 0.1);
+  }
+
+  .coming-soon__mark {
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 22px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #725cff, #b76dff);
+    box-shadow: 0 12px 28px rgba(109, 74, 255, 0.25);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 850;
+    letter-spacing: -0.04em;
+  }
+
+  .coming-soon__eyebrow {
+    margin: 0;
+    color: var(--reader-accent, #6d4aff);
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 14px 0 0;
+    color: var(--reader-text, #29233f);
+    font-size: clamp(48px, 8vw, 78px);
+    line-height: 0.98;
+    letter-spacing: -0.06em;
+  }
+
+  .coming-soon__copy {
+    margin: 20px 0 0;
+    color: var(--reader-muted, #686176);
+    font-size: clamp(17px, 2.2vw, 21px);
+    line-height: 1.5;
+  }
+
+  .coming-soon__back {
+    min-height: 44px;
+    margin: 30px auto 0;
+    padding: 0 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 999px;
+    background: var(--reader-accent-strong, var(--reader-accent, #6d4aff));
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .coming-soon__back:focus-visible {
+    outline: 3px solid var(--reader-accent, #6d4aff);
+    outline-offset: 4px;
+  }
+
+  @media (max-width: 520px) {
+    .coming-soon {
+      padding: 24px 16px;
+    }
+
+    .coming-soon__card {
+      padding: 38px 22px;
+      border-radius: 22px;
+    }
+  }
+</style>

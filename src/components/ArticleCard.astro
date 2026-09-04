@@ -1,0 +1,143 @@
+---
+interface Props {
+  image?: string;
+  imageAlt?: string;
+  category?: string;
+  title: string;
+  author?: string;
+  time?: string;
+  href: string;
+}
+
+const {
+  image = "/images/ai.webp",
+  imageAlt,
+  category = "Technology",
+  title,
+  author = "TechBubble",
+  time,
+  href,
+} = Astro.props;
+---
+
+<a href={href} class="article-card" aria-label={`Read article: ${title}`}>
+  <img
+    src={image}
+    alt={imageAlt || title}
+    width="720"
+    height="500"
+    loading="eager"
+    decoding="async"
+  />
+
+  <span class="overlay" aria-hidden="true"></span>
+
+  <div class="content">
+    <span class="category">{category}</span>
+    <h3 class="title">{title}</h3>
+
+    {(author || time) && (
+      <span class="meta">
+        {author}
+        {time && <span aria-hidden="true"> &middot; </span>}
+        {time}
+      </span>
+    )}
+  </div>
+</a>
+
+<style>
+  .article-card {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    display: block;
+    border: 1px solid var(--reader-border, rgba(109, 74, 255, 0.16));
+    border-radius: 18px;
+    background: var(--reader-surface, #21184f);
+    box-shadow: var(--reader-shadow, 0 18px 44px rgba(44, 31, 91, 0.1));
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .article-card:focus-visible {
+    outline: 3px solid var(--reader-accent, #725cff);
+    outline-offset: 4px;
+  }
+
+  .article-card img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .article-card:hover img {
+    transform: scale(1.025);
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      transparent 26%,
+      rgba(10, 7, 20, 0.2) 48%,
+      rgba(7, 5, 14, 0.9) 100%
+    );
+  }
+
+  .content {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    left: 18px;
+  }
+
+  .category,
+  .title,
+  .meta {
+    display: block;
+  }
+
+  .category {
+    width: max-content;
+    max-width: 100%;
+    padding-top: 9px;
+    border-top: 1px solid rgba(255, 255, 255, 0.42);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 750;
+    letter-spacing: 0.06em;
+  }
+
+  .title {
+    margin: 9px 0;
+    display: -webkit-box;
+    overflow: hidden;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.22;
+    letter-spacing: -0.025em;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .meta {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 11px;
+  }
+
+  @media (max-width: 700px) {
+    .title {
+      font-size: 20px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .article-card img {
+      transition: none;
+    }
+  }
+</style>

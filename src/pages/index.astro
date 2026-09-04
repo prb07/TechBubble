@@ -1,64 +1,74 @@
 ---
-import Background from "../components/Background.astro";
-import AppBar from "../components/AppBar.astro";
+import NewsLayout from "../components/NewsLayout.astro";
 import TrendingBar from "../components/TrendingBar.astro";
-import HeroText from "../components/HeroText.astro"
-import FeaturedArticle from "../components/FeaturedArticle.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
 ---
 
-<html>
+<SiteLayout
+  title="TechBubble"
+  description="TechBubble - Latest technology news, AI, startups, cybersecurity and innovation."
+  bodyClass="home-page"
+>
+  <TrendingBar />
 
-<head>
-<meta charset="UTF-8">
-<title>TechPulse</title>
-</head>
+  <main>
+    <section class="news-section" aria-label="Latest technology news">
+      <NewsLayout />
+    </section>
+  </main>
+</SiteLayout>
 
-<body>
+<style is:global>
+  * {
+    box-sizing: border-box;
+  }
 
-<Background />
-<AppBar />
-<TrendingBar/>
-<div class="hero-layout">
+  html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
 
-<HeroText />
+  body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    color: var(--reader-text, #21184f);
+    font-family:
+      Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
 
-<FeaturedArticle />
+  main {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
 
-</div>
-<style>
+  .news-section {
+    width: min(1240px, calc(100% - 40px));
+    margin: 26px auto 64px;
+  }
 
-.hero-layout{
+  html[data-reading-mode="soft"] body.home-page {
+    --site-background:
+      radial-gradient(
+        circle at 15% 55%,
+        rgba(255, 185, 210, 0.35),
+        transparent 30%
+      ),
+      radial-gradient(
+        circle at 85% 45%,
+        rgba(190, 170, 255, 0.35),
+        transparent 32%
+      ),
+      linear-gradient(135deg, #fffaf8 0%, #ffffff 45%, #faf5ff 100%);
+  }
 
-max-width:1320px;
-
-margin:0 auto;
-
-display:grid;
-
-grid-template-columns:1fr 1fr;
-
-gap:60px;
-
-padding:0 30px;
-
-align-items:start;
-
-}
-
-
-@media(max-width:900px){
-
-.hero-layout{
-
-grid-template-columns:1fr;
-
-}
-
-}
-
+  @media (max-width: 900px) {
+    .news-section {
+      width: calc(100% - 32px);
+      margin: 22px auto 48px;
+    }
+  }
 </style>
-
-
-</body>
-
-</html>
