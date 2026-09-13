@@ -1,222 +1,389 @@
-<section class="latest">
+---
+import { defineQuery } from "groq";
+import type { SanityImageSource } from "@sanity/image-url";
+import AdBanner from "./AdBanner.astro";
+import { sanityClient, urlFor } from "../lib/sanity";
 
-<div class="heading">
+interface FeedArticle {
+  _id: string;
+  title: string;
+  slug: string;
+  category?: string;
+  author?: string;
+  readTime?: string;
+  publishedAt?: string;
+  image?: SanityImageSource & {
+    alt?: string;
+  };
+}
 
-<h2>
-Latest Articles
-</h2>
+const BUBBLE_FEED_QUERY = defineQuery(/* groq */ `
+  *[
+    _type == "article" &&
+    !(_id in path("drafts.**")) &&
+    defined(title) &&
+    defined(slug.current)
+  ] | order(coalesce(publishedAt, _createdAt) desc, _id asc) {
+    _id,
+    title,
+    "slug": slug.current,
+    category,
+    author,
+    readTime,
+    "publishedAt": coalesce(publishedAt, _createdAt),
+    image {
+      asset,
+      alt,
+      hotspot,
+      crop
+    }
+  }
+`);
 
+let articles: FeedArticle[] = [];
 
-</div>
+try {
+  articles = await sanityClient.fetch<FeedArticle[]>(BUBBLE_FEED_QUERY);
+} catch (error) {
+  console.error("Unable to load Bubble Feed articles", error);
+}
 
+const formatDate = (value?: string) => {
+  if (!value) return "";
 
-<div class="article">
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
 
+  return new Intl.DateTimeFormat("en", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(date);
+};
 
-<div class="thumb">
+const feed = articles.map((article) => ({
+  ...article,
+  imageUrl: article.image
+    ? urlFor(article.image)
+        .width(560)
+        .height(315)
+        .fit("crop")
+        .auto("format")
+        .url()
+    : "/images/ai.webp",
+  imageAlt: article.image?.alt || article.title,
+  formattedDate: formatDate(article.publishedAt),
+}));
+---
 
-🚀
+<section class="bubble-feed" aria-labelledby="bubble-feed-heading">
+  <header class="feed-heading">
+    <span class="heading-mark" aria-hidden="true"></span>
+    <h2 id="bubble-feed-heading">Bubble Feed</h2>
+  </header>
 
-</div>
+  <div class="feed-layout">
+    {feed.length > 0 ? (
+      <div class="feed-list">
+        {feed.map((article) => (
+          <article class="feed-item">
+            <a
+              class="feed-link"
+              href={`/article/${encodeURIComponent(article.slug)}/`}
+              aria-label={`Read article: ${article.title}`}
+            >
+              <div class="feed-image">
+                <img
+                  src={article.imageUrl}
+                  alt={article.imageAlt}
+                  width="560"
+                  height="315"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
 
+              <div class="feed-copy">
+                <span class="category">{article.category || "Technology"}</span>
+                <h3>{article.title}</h3>
 
-<div class="content">
+                <p class="meta">
+                  <span>{article.author || "TechBubble Editorial"}</span>
+                  {article.formattedDate && (
+                    <>
+                      <span aria-hidden="true">&middot;</span>
+                      <time datetime={article.publishedAt}>{article.formattedDate}</time>
+                    </>
+                  )}
+                  {article.readTime && (
+                    <>
+                      <span aria-hidden="true">&middot;</span>
+                      <span>{article.readTime}</span>
+                    </>
+                  )}
+                </p>
+              </div>
 
-<div class="category">
-STARTUPS
-</div>
+            </a>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <div class="empty-state">
+        <h3>New stories are being prepared.</h3>
+        <p>Published TechBubble articles will appear here.</p>
+      </div>
+    )}
 
-
-<h3>
-How to launch your SaaS product successfully
-</h3>
-
-
-<p>
-By Jane Cooper • May 20, 2025
-</p>
-
-
-</div>
-
-
-<div class="bookmark">
-♡
-</div>
-
-
-</div>
-
-
-
-<div class="article">
-
-
-<div class="thumb">
-
-AI
-
-</div>
-
-
-<div class="content">
-
-<div class="category">
-ARTIFICIAL INTELLIGENCE
-</div>
-
-
-<h3>
-The future of AI agents in business
-</h3>
-
-
-<p>
-By Alex Morgan • May 18, 2025
-</p>
-
-
-</div>
-
-
-<div class="bookmark">
-♡
-</div>
-
-
-</div>
-
-
-
+    <aside class="feed-ad" aria-label="Sponsored">
+      <AdBanner />
+    </aside>
+  </div>
 </section>
 
-
-
 <style>
-
-.latest{
-
-padding:40px 32px;
-
-}
-
-
-h2{
-
-font-size:28px;
-
-margin-bottom:25px;
-
-}
-
-
-.article{
-
-display:flex;
-
-align-items:flex-start;
-
-gap:18px;
-
-background:white;
-
-padding:15px;
-
-border-radius:22px;
-
-margin-bottom:20px;
-
-box-shadow:
-0 15px 40px rgba(0,0,0,.06);
-
-position:relative;
-
-}
-
-
-.thumb{
-
-width:100px;
-
-height:90px;
-
-border-radius:18px;
-
-background:
-
-linear-gradient(
-135deg,
-#ebe7ff,
-#ffffff
-);
-
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-font-size:28px;
-
-font-weight:700;
-
-color:#665cff;
-
-flex-shrink:0;
-
-}
-
-
-.content{
-
-flex:1;
-
-}
-
-
-.category{
-
-font-size:12px;
-
-font-weight:700;
-
-color:#665cff;
-
-margin-bottom:8px;
-
-}
-
-
-h3{
-
-font-size:17px;
-
-line-height:1.4;
-
-color:#17145c;
-
-}
-
-
-p{
-
-font-size:13px;
-
-color:#999;
-
-margin-top:12px;
-
-}
-
-
-.bookmark{
-
-font-size:25px;
-
-color:#777;
-
-}
-
-
+  .bubble-feed {
+    width: 100%;
+  }
+
+  .feed-heading {
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .heading-mark {
+    width: 5px;
+    height: 28px;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: linear-gradient(
+      180deg,
+      var(--reader-accent, #6d4aff),
+      #bc6cff
+    );
+    box-shadow: 0 5px 14px rgba(109, 74, 255, 0.24);
+  }
+
+  .bubble-feed h2 {
+    margin: 0;
+    color: var(--reader-text, #21184f);
+    font-size: clamp(26px, 3vw, 34px);
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+  }
+
+  .feed-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 270px;
+    align-items: start;
+    gap: 32px;
+  }
+
+  .feed-list {
+    display: grid;
+    gap: 14px;
+  }
+
+  .empty-state {
+    overflow: hidden;
+    border: 1px solid var(--reader-border, rgba(109, 74, 255, 0.15));
+    border-radius: 20px;
+    background: var(--reader-surface, rgba(255, 255, 255, 0.9));
+    box-shadow: var(--reader-shadow, 0 18px 52px rgba(67, 47, 145, 0.08));
+  }
+
+  .feed-item {
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--reader-border, rgba(109, 74, 255, 0.15));
+    border-right-color: color-mix(
+      in srgb,
+      var(--reader-accent, #6d4aff) 32%,
+      transparent
+    );
+    border-left-color: color-mix(
+      in srgb,
+      var(--reader-accent, #6d4aff) 32%,
+      transparent
+    );
+    border-right-width: 2px;
+    border-left-width: 2px;
+    border-radius: 17px;
+    background: var(--reader-card-background, var(--reader-surface, #fff));
+    box-shadow: 0 10px 30px rgba(67, 47, 145, 0.065);
+    transition:
+      border-color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .feed-item:hover {
+    border-color: color-mix(in srgb, var(--reader-accent, #6d4aff) 38%, transparent);
+    transform: translateY(-2px);
+  }
+
+  .feed-link {
+    position: relative;
+    min-height: 156px;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    align-items: center;
+    gap: 22px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .feed-link:focus-visible {
+    outline: 3px solid var(--reader-accent, #6d4aff);
+    outline-offset: -4px;
+  }
+
+  .feed-image {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--reader-page, #eeeaf8);
+  }
+
+  .feed-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .feed-link:hover .feed-image img {
+    transform: scale(1.025);
+  }
+
+  .feed-copy {
+    min-width: 0;
+  }
+
+  .category {
+    display: block;
+    overflow: hidden;
+    color: var(--reader-accent, #6d4aff);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.075em;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .bubble-feed h3 {
+    margin: 10px 0 11px;
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--reader-text, #21184f);
+    font-size: 19px;
+    line-height: 1.33;
+    letter-spacing: -0.025em;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    transition: color 0.2s ease;
+  }
+
+  .feed-link:hover h3 {
+    color: var(--reader-accent, #6d4aff);
+  }
+
+  .meta {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    color: var(--reader-muted, #77758a);
+    font-size: 11px;
+  }
+
+  .feed-ad {
+    position: sticky;
+    top: 92px;
+    min-width: 0;
+  }
+
+  .empty-state {
+    padding: 52px 24px;
+    color: var(--reader-text, #21184f);
+    text-align: center;
+  }
+
+  .empty-state h3,
+  .empty-state p {
+    margin: 0;
+  }
+
+  .empty-state p {
+    margin-top: 8px;
+    color: var(--reader-muted, #68657c);
+    font-size: 13px;
+  }
+
+  @media (max-width: 1050px) {
+    .feed-layout {
+      grid-template-columns: minmax(0, 1fr) 246px;
+      gap: 24px;
+    }
+
+    .feed-link {
+      grid-template-columns: 172px minmax(0, 1fr);
+      gap: 18px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .feed-layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .feed-ad {
+      position: static;
+      padding-top: 6px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .feed-link {
+      min-height: 124px;
+      padding: 12px;
+      grid-template-columns: 124px minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    .bubble-feed h3 {
+      margin: 7px 0 8px;
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .category {
+      font-size: 8px;
+    }
+
+    .meta {
+      font-size: 9px;
+    }
+
+  }
+
+  @media (max-width: 390px) {
+    .feed-link {
+      grid-template-columns: 106px minmax(0, 1fr);
+      gap: 12px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .feed-item,
+    .feed-image img,
+    .bubble-feed h3 {
+      transition: none;
+    }
+  }
 </style>

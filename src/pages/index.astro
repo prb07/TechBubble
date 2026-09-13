@@ -1,5 +1,6 @@
 ---
 import NewsLayout from "../components/NewsLayout.astro";
+import LatestArticles from "../components/LatestArticles.astro";
 import TrendingBar from "../components/TrendingBar.astro";
 import SiteLayout from "../layouts/SiteLayout.astro";
 ---
@@ -14,6 +15,10 @@ import SiteLayout from "../layouts/SiteLayout.astro";
   <main>
     <section class="news-section" aria-label="Latest technology news">
       <NewsLayout />
+    </section>
+
+    <section class="bubble-feed-section" aria-label="Bubble Feed">
+      <LatestArticles />
     </section>
   </main>
 </SiteLayout>
@@ -50,6 +55,14 @@ import SiteLayout from "../layouts/SiteLayout.astro";
     margin: 26px auto 64px;
   }
 
+  .bubble-feed-section {
+    width: min(
+      1580px,
+      calc(50% + min(620px, calc(50% - 20px)))
+    );
+    margin: 0 auto 80px;
+  }
+
   html[data-reading-mode="soft"] body.home-page {
     --site-background:
       radial-gradient(
@@ -69,6 +82,11 @@ import SiteLayout from "../layouts/SiteLayout.astro";
     .news-section {
       width: calc(100% - 32px);
       margin: 22px auto 48px;
+    }
+
+    .bubble-feed-section {
+      width: calc(100% - 16px);
+      margin-bottom: 64px;
     }
   }
 </style>
